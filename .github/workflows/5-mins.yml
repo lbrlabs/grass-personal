@@ -32,9 +32,14 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2 
 
-    - uses: jaxxstorm/action-install-gh-release@master
+    - name: Install grass
+      uses: jaxxstorm/action-install-gh-release@master
       with:
         repo: jaxxstorm/grass
+
+    - name: Run grass
+      run: grass --db=dynamodb --keyword=tailscale --bot=print --bot=discord --searchers=reddit --searchers=hackernews --searchers=bluesky
+
     
     
         
