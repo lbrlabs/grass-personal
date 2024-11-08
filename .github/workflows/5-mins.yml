@@ -43,7 +43,7 @@ jobs:
         DISCORD_CHANNEL_ID: ${{ secrets.DISCORD_CHANNEL_ID }}
         REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
         REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
-        REDDIT_PASSWORDL: ${{ secrets.REDDIT_PASSWORD }}
+        REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
         REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
         SOCIAL_SEARCH_TABLE_NAME: ${{ secrets.SOCIAL_SEARCH_TABLE_NAME }}
         BSKY_USERNAME: ${{ secrets.BSKY_USERNAME }}   
