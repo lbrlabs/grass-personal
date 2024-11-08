@@ -38,6 +38,16 @@ jobs:
         repo: jaxxstorm/grass
 
     - name: Run grass
+      env:
+        DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+        DISCORD_CHANNEL_ID: ${{ secrets.DISCORD_CHANNEL_ID }}
+        REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+        REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+        REDDIT_PASSWORDL: ${{ secrets.REDDIT_PASSWORD }}
+        REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
+        SOCIAL_SEARCH_TABLE_NAME: ${{ secrets.SOCIAL_SEARCH_TABLE_NAME }}
+        BSKY_USERNAME: ${{ secrets.BSKY_USERNAME }}   
+        BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }} 
       run: grass --db=dynamodb --keyword=tailscale --bot=print --bot=discord --searchers=reddit --searchers=hackernews --searchers=bluesky
 
     
