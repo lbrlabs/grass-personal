@@ -1,41 +1,40 @@
-name: "cron"
+name: "Social Media Monitor"
 
 on:
-    schedule:
-      - cron: "*/5 * * * *"
-    workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
 
+# Limit concurrent runs and cancel in-progress ones
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
-  DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
-  DISCORD_CHANNEL_ID: ${{ secrets.DISCORD_CHANNEL_ID }}
-  REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
-  REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
-  REDDIT_PASSWORDL: ${{ secrets.REDDIT_PASSWORD }}
-  REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
-  SOCIAL_SEARCH_TABLE_NAME: ${{ secrets.SOCIAL_SEARCH_TABLE_NAME }}
-  BSKY_USERNAME: ${{ secrets.BSKY_USERNAME }}   
-  BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }} 
+  AWS_REGION: us-west-2
 
 jobs:
-  grass:
+  monitor-social:
     runs-on: ubuntu-latest
+    timeout-minutes: 4  # Ensure job completes before next schedule
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4  # Updated to latest version
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
+      uses: aws-actions/configure-aws-credentials@v4  # Updated to latest version
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2 
+        aws-region: ${{ env.AWS_REGION }}
 
     - name: Install grass
       uses: jaxxstorm/action-install-gh-release@master
       with:
         repo: jaxxstorm/grass
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Added for rate limit handling
 
     - name: Run grass
       env:
@@ -46,10 +45,14 @@ jobs:
         REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
         REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
         SOCIAL_SEARCH_TABLE_NAME: ${{ secrets.SOCIAL_SEARCH_TABLE_NAME }}
-        BSKY_USERNAME: ${{ secrets.BSKY_USERNAME }}   
-        BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }} 
-      run: grass --db=dynamodb --keyword=tailscale --bot=print --bot=discord --searchers=reddit --searchers=hackernews --searchers=bluesky
-
-    
-    
-        
+        BSKY_USERNAME: ${{ secrets.BSKY_USERNAME }}
+        BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }}
+      run: |
+        grass \
+          --db=dynamodb \
+          --keyword=tailscale \
+          --bot=print \
+          --bot=discord \
+          --searchers=reddit \
+          --searchers=hackernews \
+          --searchers=bluesky
