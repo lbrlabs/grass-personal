@@ -63,4 +63,5 @@ jobs:
           --searchers=reddit \
           --searchers=hackernews \
           --searchers=bluesky \
+          --searchers=youtube \
           --searchers=fediverse
