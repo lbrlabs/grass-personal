@@ -60,6 +60,7 @@ jobs:
           --keyword=leebriggs \
           --bot=print \
           --bot=discord \
+          --bot=slack \
           --searchers=reddit \
           --searchers=hackernews \
           --searchers=bluesky \
