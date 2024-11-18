@@ -60,6 +60,7 @@ jobs:
           --db=dynamodb \
           --keyword=tailscale \
           --keyword=leebriggs \
+          --keyword=leebriggs.co.uk \
           --bot=print \
           --bot=discord \
           --searchers=reddit \
